@@ -8,15 +8,18 @@
 void callback(char* topic, byte* payload, unsigned int length);
 
 #define MQTT_SERVER "192.168.1.7"  //you MQTT IP Address
-const char* ssid = "ssid";
-const char* password = "psswd";
+const char* ssid = "Raspberry";
+const char* password = "ankakhutyantiv1918";
 
 int state = HIGH;
 const int relayPin = D6;
 const int ledPin = D2;
 
 char const* relay_set_channel = "/home/relay/set/";
+char const* led_set_channel = "/home/led/set/";
+
 char const* relay_state_channel = "/home/relay/state/";
+char const* led_state_channel = "/home/led/state/";
 
 
 

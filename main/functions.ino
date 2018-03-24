@@ -32,9 +32,27 @@ void callback(char* p_topic, byte* p_payload, unsigned int p_length) {
     }
   }
 
+  if (topicStr == led_set_channel) {
+    Serial.println("first loop led");
+    Serial.println(payload);
+
+  //convert string payload to char array
+    int n = payload.length(); 
+    char payload_char_array[n+1]; 
+    strcpy(payload_char_array, payload.c_str()); 
+    
+    long long number = strtol(payload_char_array, NULL, 16);
+    long long r = number >> 16;
+    long long g = number >> 8 & 0xFF;
+    long long b = number & 0xFF;
+    delay(200);
+    ledColor(r, g, b);
+    client.publish(led_state_channel, "colored");
+  }
+
 }
 
-void ledColor(uint8_t r,uint8_t g, uint8_t b){
+void ledColor(uint8_t r, uint8_t g, uint8_t b) {
   strip.setPixelColor(0, r, g, b);
   strip.show();
 }
@@ -54,7 +72,7 @@ void reconnect() {
       delay(500);
       Serial.print(".");
       firstWifiloop++;
-      ledColor(255,0,0);
+      ledColor(255, 0, 0);
     }
     if (WiFi.status() == WL_CONNECTED) {
       //print out some more debug once connected
@@ -62,7 +80,7 @@ void reconnect() {
       Serial.println("WiFi connected");
       Serial.println("IP address: ");
       Serial.println(WiFi.localIP());
-      ledColor(0,255,0);
+      ledColor(0, 255, 0);
       delay(1000);
     }
   }
@@ -84,8 +102,9 @@ void reconnect() {
       //EJ: Delete "mqtt_username", and "mqtt_password" here if you are not using any
       if (client.connect((char*) clientName.c_str())) { //EJ: Update accordingly with your MQTT account
         Serial.println("\tMQTT Connected");
-        ledColor(0,0,0);
+        ledColor(0, 0, 0);
         client.subscribe(relay_set_channel);
+        client.subscribe(led_set_channel);
 
         //EJ: Do not forget to replicate the above line if you will have more than the above number of relay switches
       }
@@ -93,7 +112,7 @@ void reconnect() {
       //otherwise print failed for debugging
       else {
         Serial.println("\tFailed.");
-        ledColor(255,0,255);
+        ledColor(255, 0, 255);
         break;
       }
     }
