@@ -8,7 +8,7 @@ void callback(char* p_topic, byte* p_payload, unsigned int p_length) {
   for (uint8_t i = 0; i < p_length; i++) {
     payload.concat((char)p_payload[i]);
   }
-  //EJ: Note:  the "topic" value gets overwritten everytime it receives confirmation (callback) message from MQTT
+  //EJ: Note: the "topic" value gets overwritten everytime it receives confirmation (callback) message from MQTT
 
   //Print out some debugging info
   Serial.println("Callback update.");
@@ -33,7 +33,7 @@ void callback(char* p_topic, byte* p_payload, unsigned int p_length) {
   }
 
   if (topicStr == led_set_channel) {
-    Serial.println("first loop led");
+    Serial.print("led color: ");
     Serial.println(payload);
 
   //convert string payload to char array
@@ -47,7 +47,7 @@ void callback(char* p_topic, byte* p_payload, unsigned int p_length) {
     long long b = number & 0xFF;
     delay(200);
     ledColor(r, g, b);
-    client.publish(led_state_channel, "colored");
+    client.publish(led_state_channel, payload_char_array);
   }
 
 }
