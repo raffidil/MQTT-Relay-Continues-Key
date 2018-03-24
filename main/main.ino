@@ -1,24 +1,26 @@
 #include <PubSubClient.h>
 #include <ESP8266WiFi.h>
 #include <ArduinoOTA.h>
+#include <Adafruit_NeoPixel.h>
 #include <TaskScheduler.h>
 #include <stdlib.h>
 
 void callback(char* topic, byte* payload, unsigned int length);
 
-#define MQTT_SERVER "192.168.31.211"  //you MQTT IP Address
+#define MQTT_SERVER "192.168.1.7"  //you MQTT IP Address
 const char* ssid = "ssid";
-const char* password = "passd";
+const char* password = "psswd";
 
 int state = HIGH;
 const int relayPin = D6;
-
+const int ledPin = D2;
 
 char const* relay_set_channel = "/home/relay/set/";
 char const* relay_state_channel = "/home/relay/state/";
 
 
 
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(1, ledPin, NEO_GRB + NEO_KHZ800);
 Scheduler runner;
 WiFiClient wifiClient;
 PubSubClient client(MQTT_SERVER, 1883, callback, wifiClient);
@@ -40,6 +42,9 @@ void setup() {
   //initialize the switch as an output and set to LOW (off)
   pinMode(relayPin, OUTPUT); // Relay Switch 1
   digitalWrite(relayPin, LOW);
+
+  pinMode(ledPin, OUTPUT); // Relay Switch 1
+  ledColor(0,255,255);
 
   //start the serial line for debugging
 

@@ -6,16 +6,16 @@ void buttonLoop() {
 
   buttonReading = digitalRead(buttonPin);
 
-  Serial.println("buttonReading:   ");
-  Serial.println(buttonReading);
+  //Serial.print("buttonReading:   ");
+  //Serial.println(buttonReading);
 
-  Serial.println("buttonPrevious:   ");
-  Serial.println(buttonPrevious);
+  //Serial.print("buttonPrevious:   ");
+  //Serial.println(buttonPrevious);
 
   if (buttonReading != buttonPrevious) {
     state = !state;
     digitalWrite(relayPin, state);
-    client.publish("/home/relay/state/", (state == HIGH ? "ON" : "OFF"));
+    client.publish("/home/relay/state/", (state == LOW ? "ON" : "OFF"));
   }
 
     buttonPrevious = buttonReading;
